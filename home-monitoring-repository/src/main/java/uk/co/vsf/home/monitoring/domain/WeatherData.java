@@ -1,47 +1,30 @@
-package uk.co.vsf.home.monitoring.weather.domain;
+package uk.co.vsf.home.monitoring.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import uk.co.vsf.home.monitoring.domain.HomeMonitoringId;
-
-@Entity
-@Table(name = "DATA")
+@Embeddable
 public class WeatherData implements Serializable {
 
 	private static final long serialVersionUID = 9083144591538907113L;
-
-	@EmbeddedId
-	private HomeMonitoringId id;
 
 	@Column(precision = 5, scale = 2, updatable = false)
 	private BigDecimal windSpeed;
 
 	@Column(precision = 5, scale = 2, updatable = false)
 	private BigDecimal gustSpeed;
-	
+
 	protected WeatherData() {
 	}
-	
-	public WeatherData(LocalDateTime dateTime, BigDecimal windSpeed, BigDecimal gustSpeed) {
-		this.id = new HomeMonitoringId(dateTime);
+
+	public WeatherData(BigDecimal windSpeed, BigDecimal gustSpeed) {
 		this.windSpeed = windSpeed;
 		this.gustSpeed = gustSpeed;
-	}
-	
-	public LocalDateTime getDateTime() {
-		if(this.id == null){
-			return null;
-		}
-		return this.id.getDateTime();
 	}
 
 	public BigDecimal getWindSpeed() {
@@ -51,7 +34,7 @@ public class WeatherData implements Serializable {
 	public BigDecimal getGustSpeed() {
 		return gustSpeed;
 	}
-	
+
 	@Override
 	public String toString() {
 		ReflectionToStringBuilder rtsb = new ReflectionToStringBuilder(this);
@@ -63,7 +46,6 @@ public class WeatherData implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((gustSpeed == null) ? 0 : gustSpeed.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((windSpeed == null) ? 0 : windSpeed.hashCode());
 		return result;
 	}
@@ -81,11 +63,6 @@ public class WeatherData implements Serializable {
 			if (other.gustSpeed != null)
 				return false;
 		} else if (!gustSpeed.equals(other.gustSpeed))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (windSpeed == null) {
 			if (other.windSpeed != null)

@@ -1,4 +1,4 @@
-package uk.co.vsf.home.monitoring.weather.repository;
+package uk.co.vsf.home.monitoring.repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,38 +12,38 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import uk.co.vsf.home.monitoring.weather.domain.WeatherData;
+import uk.co.vsf.home.monitoring.domain.HomeMonitoringData;
 
 @Repository
-public class WeatherRepositoryImpl implements CustomWeatherRepository {
+public class HomeMonitoringRepositoryImpl implements CustomHomeMonitoringRepository {
 
 	private EntityManager entityManager;
 
-	public WeatherRepositoryImpl(EntityManager entityManager) {
+	public HomeMonitoringRepositoryImpl(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
 	@Override
-	public WeatherData findByDateTime(LocalDateTime dateTime) {
+	public HomeMonitoringData findByDateTime(LocalDateTime dateTime) {
 		if (dateTime == null) {
 			throw new IllegalArgumentException("Must provide a date-time");
 		}
 
-		Query query = entityManager.createQuery("FROM WeatherData wd WHERE wd.id.date=? and wd.id.time=?");
+		Query query = entityManager.createQuery("FROM HomeMonitoringData wd WHERE wd.id.date=? and wd.id.time=?");
 		query.setParameter(1, formatDate(dateTime.toLocalDate()));
 		query.setParameter(2, formatTime(dateTime.toLocalTime()));
 
-		return (WeatherData) query.getSingleResult();
+		return (HomeMonitoringData) query.getSingleResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<WeatherData> findByDate(LocalDate date) throws NoResultException {
+	public List<HomeMonitoringData> findByDate(LocalDate date) throws NoResultException {
 		if (date == null) {
 			throw new IllegalArgumentException("Must provide a date");
 		}
 
-		Query query = entityManager.createQuery("FROM WeatherData wd WHERE wd.id.date=?");
+		Query query = entityManager.createQuery("FROM HomeMonitoringData wd WHERE wd.id.date=?");
 		query.setParameter(1, formatDate(date));
 
 		return query.getResultList();
@@ -58,7 +58,7 @@ public class WeatherRepositoryImpl implements CustomWeatherRepository {
 	}
 
 	@Override
-	public void persist(WeatherData data) {
+	public void saveOrUpdate(HomeMonitoringData data) {
 		if(data == null ){
 			throw new IllegalArgumentException("Must have some data to persist...");
 		}

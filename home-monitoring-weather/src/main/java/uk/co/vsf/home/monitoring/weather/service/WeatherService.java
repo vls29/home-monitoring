@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import uk.co.vsf.home.monitoring.repository.WeatherRepository;
 import uk.co.vsf.home.monitoring.weather.domain.WeatherData;
-import uk.co.vsf.home.monitoring.weather.repository.WeatherRepository;
 
 public class WeatherService {
 
